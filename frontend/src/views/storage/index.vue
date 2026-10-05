@@ -47,7 +47,7 @@
           <td>{{ row.status }}</td>
           <td class="row-actions">
             <button
-              v-for="action in actions"
+              v-for="action in availableActions(row)"
               :key="action"
               class="link"
               type="button"
@@ -78,12 +78,13 @@ import {
   listEntries,
   moduleMeta,
   runAction as applyAction,
+  isRowTerminal,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('storage')
 const columns = ["架位编号", "库房名称", "存放器物类别", "架位层数", "容纳件数", "当前件数", "管理人", "架位状态"]
-const actions = ["存放器物", "调整整理", "临时封存"]
+const allActions = meta.actions
 const statuses = ["正常使用", "已满", "待整理", "临时封存"]
 const stats = [{"label": "架位总数", "value": 0}, {"label": "已满架位", "value": 0}, {"label": "可用架位", "value": 0}]
 
@@ -92,6 +93,14 @@ const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
 const filterFields = columns.slice(0, 3)
+function availableActions(row: EntryRow) {
+  // 已到终态（含已作废）的记录不再给出任何流转动作，作废结论不会重复触发。
+  if (isRowTerminal(meta, String(row.status))) {
+    return []
+  }
+  return allActions
+}
+
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
     status,

@@ -47,7 +47,7 @@
           <td>{{ row.status }}</td>
           <td class="row-actions">
             <button
-              v-for="action in actions"
+              v-for="action in availableActions(row)"
               :key="action"
               class="link"
               type="button"
@@ -78,13 +78,14 @@ import {
   listEntries,
   moduleMeta,
   runAction as applyAction,
+  isRowTerminal,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('visit')
 const columns = ["来访编号", "来访单位", "来访人数", "参观日期", "接待人员", "参观区域", "备注事项", "记录状态"]
-const actions = ["完成接待", "提交归档", "取消接待"]
-const statuses = ["待接待", "已接待", "已归档", "已取消"]
+const allActions = meta.actions
+const statuses = ["待接待", "已接待", "已归档", "已取消", "已作废"]
 const stats = [{"label": "本月接待次数", "value": 0}, {"label": "累计参观人数", "value": 0}, {"label": "待接待批次", "value": 0}]
 
 const rows = ref<EntryRow[]>([])
@@ -92,6 +93,14 @@ const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
 const filterFields = columns.slice(0, 3)
+function availableActions(row: EntryRow) {
+  // 已到终态（含已作废）的记录不再给出任何流转动作，作废结论不会重复触发。
+  if (isRowTerminal(meta, String(row.status))) {
+    return []
+  }
+  return allActions
+}
+
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
     status,

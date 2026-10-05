@@ -47,7 +47,7 @@
           <td>{{ row.status }}</td>
           <td class="row-actions">
             <button
-              v-for="action in actions"
+              v-for="action in availableActions(row)"
               :key="action"
               class="link"
               type="button"
@@ -78,12 +78,13 @@ import {
   listEntries,
   moduleMeta,
   runAction as applyAction,
+  isRowTerminal,
 } from '@/api/local-service'
 import type { EntryRow } from '@/data/types'
 
 const meta = moduleMeta('coordinate')
 const columns = ["测点编号", "所属单位", "坐标系", "北坐标", "东坐标", "高程值", "测量人", "记录状态"]
-const actions = ["提交校核", "确认校核", "安排重测"]
+const allActions = meta.actions
 const statuses = ["已测量", "已校核", "需重测", "已归档"]
 const stats = [{"label": "测点总数", "value": 0}, {"label": "已校核数", "value": 0}, {"label": "待校核数", "value": 0}]
 
@@ -92,6 +93,14 @@ const total = ref(0)
 const errorMessage = ref('')
 const filters = ref<Record<string, string>>({})
 const filterFields = columns.slice(0, 3)
+function availableActions(row: EntryRow) {
+  // 已到终态（含已作废）的记录不再给出任何流转动作，作废结论不会重复触发。
+  if (isRowTerminal(meta, String(row.status))) {
+    return []
+  }
+  return allActions
+}
+
 const statusSummary = computed(() =>
   statuses.map((status: string) => ({
     status,

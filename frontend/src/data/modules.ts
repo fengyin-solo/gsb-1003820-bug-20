@@ -12,6 +12,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始发掘", "确认到底", "安排回填"],
     actionTargets: {"开始发掘": "发掘中", "确认到底": "已到底", "安排回填": "已回填"},
     metrics: ["探方总数", "发掘中探方", "已到底探方"],
+    abnormalStatuses: ["暂停"],
   },
   {
     key: "stratum",
@@ -23,6 +24,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["提交记录", "完成校核", "退回补录"],
     actionTargets: {"提交记录": "已记录", "完成校核": "已校核", "退回补录": "需补录"},
     metrics: ["地层总数", "已校核层数", "待记录层数"],
+    abnormalStatuses: ["需补录"],
   },
   {
     key: "feature",
@@ -34,6 +36,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始清理", "完成测绘", "执行解剖"],
     actionTargets: {"开始清理": "清理中", "完成测绘": "已完绘", "执行解剖": "已解剖"},
     metrics: ["遗迹总数", "清理中遗迹", "已完绘遗迹"],
+    abnormalStatuses: [],
   },
   {
     key: "artifact",
@@ -45,6 +48,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["完成清洗", "分配编号", "办理入库"],
     actionTargets: {"完成清洗": "已清洗", "分配编号": "已编号", "办理入库": "已入库"},
     metrics: ["遗物总数", "已入库数", "待清洗数"],
+    abnormalStatuses: [],
   },
   {
     key: "flotation",
@@ -52,10 +56,11 @@ export const MODULES: ModuleMeta[] = [
     entity: "浮选样本",
     desc: "维护浮选样本，围绕样本编号、采样单位、采样层位、土样重量做登记、筛选与状态流转。",
     fields: ["样本编号", "采样单位", "采样层位", "土样重量", "浮选日期", "轻浮物类型", "操作人", "样本状态"],
-    statuses: ["已采集", "已浮选", "已分拣", "已送检", "已返回"],
-    actions: ["执行浮选", "完成分拣", "送出检测"],
-    actionTargets: {"执行浮选": "已浮选", "完成分拣": "已分拣", "送出检测": "已送检"},
+    statuses: ["已采集", "已浮选", "已分拣", "已送检", "已返回", "已作废"],
+    actions: ["执行浮选", "完成分拣", "送出检测", "作废样本"],
+    actionTargets: {"执行浮选": "已浮选", "完成分拣": "已分拣", "送出检测": "已送检", "作废样本": "已作废"},
     metrics: ["样本总数", "已浮选数", "待分拣数"],
+    abnormalStatuses: [],
   },
   {
     key: "dating",
@@ -67,6 +72,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["送出检测", "登记结果", "归档报告"],
     actionTargets: {"送出检测": "已送检", "登记结果": "已出结果", "归档报告": "已归档"},
     metrics: ["送检总数", "检测中数", "已出结果数"],
+    abnormalStatuses: [],
   },
   {
     key: "photography",
@@ -78,6 +84,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["分配编号", "提交归档", "安排重拍"],
     actionTargets: {"分配编号": "已编号", "提交归档": "已归档", "安排重拍": "需重拍"},
     metrics: ["影像总数", "已归档数", "待编号数"],
+    abnormalStatuses: ["需重拍"],
   },
   {
     key: "drawing",
@@ -89,6 +96,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["提交校核", "确认校核", "退回修改"],
     actionTargets: {"提交校核": "待校核", "确认校核": "已校核", "退回修改": "需修改"},
     metrics: ["图纸总数", "已校核数", "待校核数"],
+    abnormalStatuses: ["需修改"],
   },
   {
     key: "diary",
@@ -100,6 +108,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["提交审核", "确认审核", "退回补充"],
     actionTargets: {"提交审核": "需补充", "确认审核": "已审核", "退回补充": "需补充"},
     metrics: ["日记总数", "已审核数", "待审核数"],
+    abnormalStatuses: ["需补充"],
   },
   {
     key: "survey",
@@ -111,6 +120,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["完成记录", "提交审核", "安排复查"],
     actionTargets: {"完成记录": "已记录", "提交审核": "已审核", "安排复查": "需复查"},
     metrics: ["调查次数", "已审核记录", "待复查记录"],
+    abnormalStatuses: ["需复查"],
   },
   {
     key: "human_bone",
@@ -122,6 +132,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始鉴定", "提交鉴定", "复核鉴定"],
     actionTargets: {"开始鉴定": "鉴定中", "提交鉴定": "已鉴定", "复核鉴定": "已复核"},
     metrics: ["标本总数", "已鉴定数", "鉴定中数"],
+    abnormalStatuses: [],
   },
   {
     key: "animal_bone",
@@ -133,6 +144,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始鉴定", "提交鉴定", "复核鉴定"],
     actionTargets: {"开始鉴定": "鉴定中", "提交鉴定": "已鉴定", "复核鉴定": "已复核"},
     metrics: ["标本总数", "已鉴定数", "鉴定中数"],
+    abnormalStatuses: [],
   },
   {
     key: "pottery",
@@ -144,6 +156,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始整理", "完成整理", "登记拼对"],
     actionTargets: {"开始整理": "整理中", "完成整理": "已整理", "登记拼对": "已拼对"},
     metrics: ["标本总数", "已整理数", "待整理数"],
+    abnormalStatuses: [],
   },
   {
     key: "conservation",
@@ -155,6 +168,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["开始处理", "完成处理", "标记观察"],
     actionTargets: {"开始处理": "处理中", "完成处理": "已完成", "标记观察": "需观察"},
     metrics: ["处理总数", "已完成数", "待处理数"],
+    abnormalStatuses: ["需观察"],
   },
   {
     key: "coordinate",
@@ -166,6 +180,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["提交校核", "确认校核", "安排重测"],
     actionTargets: {"提交校核": "已校核", "确认校核": "已归档", "安排重测": "需重测"},
     metrics: ["测点总数", "已校核数", "待校核数"],
+    abnormalStatuses: ["需重测"],
   },
   {
     key: "storage",
@@ -177,6 +192,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["存放器物", "调整整理", "临时封存"],
     actionTargets: {"存放器物": "正常使用", "调整整理": "待整理", "临时封存": "临时封存"},
     metrics: ["架位总数", "已满架位", "可用架位"],
+    abnormalStatuses: ["待整理"],
   },
   {
     key: "material",
@@ -188,6 +204,7 @@ export const MODULES: ModuleMeta[] = [
     actions: ["发起采购", "确认入库", "标记停用"],
     actionTargets: {"发起采购": "需采购", "确认入库": "充足", "标记停用": "已停用"},
     metrics: ["耗材种类", "需采购种类", "偏低种类"],
+    abnormalStatuses: ["需采购", "偏低"],
   },
   {
     key: "visit",
@@ -195,10 +212,11 @@ export const MODULES: ModuleMeta[] = [
     entity: "来访记录",
     desc: "维护来访记录，围绕来访编号、来访单位、来访人数、参观日期做登记、筛选与状态流转。",
     fields: ["来访编号", "来访单位", "来访人数", "参观日期", "接待人员", "参观区域", "备注事项", "记录状态"],
-    statuses: ["待接待", "已接待", "已归档", "已取消"],
-    actions: ["完成接待", "提交归档", "取消接待"],
-    actionTargets: {"完成接待": "已接待", "提交归档": "已归档", "取消接待": "已取消"},
+    statuses: ["待接待", "已接待", "已归档", "已取消", "已作废"],
+    actions: ["完成接待", "提交归档", "取消接待", "作废来访"],
+    actionTargets: {"完成接待": "已接待", "提交归档": "已归档", "取消接待": "已取消", "作废来访": "已作废"},
     metrics: ["本月接待次数", "累计参观人数", "待接待批次"],
+    abnormalStatuses: [],
   },
 ]
 
