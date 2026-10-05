@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,8 +81,12 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('dating')
 const columns = ["送检编号", "样品类型", "采样单位", "采样层位", "送检方法", "送检日期", "预计返回", "送检状态"]
 const actions = ["送出检测", "登记结果", "归档报告"]

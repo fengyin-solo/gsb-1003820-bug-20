@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,8 +81,12 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('storage')
 const columns = ["架位编号", "库房名称", "存放器物类别", "架位层数", "容纳件数", "当前件数", "管理人", "架位状态"]
 const actions = ["存放器物", "调整整理", "临时封存"]

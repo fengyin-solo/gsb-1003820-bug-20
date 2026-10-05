@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,8 +81,12 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('survey')
 const columns = ["调查编号", "调查区域", "调查方法", "地表发现", "断面观察", "初步断代", "调查人", "记录状态"]
 const actions = ["完成记录", "提交审核", "安排复查"]

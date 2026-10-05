@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,8 +81,12 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('material')
 const columns = ["耗材编号", "耗材名称", "规格型号", "用途分类", "当前数量", "预警数量", "保管人", "耗材状态"]
 const actions = ["发起采购", "确认入库", "标记停用"]

@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,8 +81,12 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('artifact')
 const columns = ["器物编号", "出土探方", "出土层位", "器物质地", "器物类型", "完残程度", "登记人", "登记状态"]
 const actions = ["完成清洗", "分配编号", "办理入库"]

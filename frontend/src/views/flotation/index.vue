@@ -51,6 +51,8 @@
               :key="action"
               class="link"
               type="button"
+              :disabled="isTerminalRow(row)"
+              :title="isTerminalRow(row) ? '该记录已处于终态，不能再操作' : ''"
               @click="runAction(action, row)"
             >
               {{ action }}
@@ -79,12 +81,16 @@ import {
   moduleMeta,
   runAction as applyAction,
 } from '@/api/local-service'
+import { isTerminalStatus } from '@/data/caliber'
 import type { EntryRow } from '@/data/types'
 
+function isTerminalRow(row: EntryRow) {
+  return isTerminalStatus(meta, String(row.status))
+}
 const meta = moduleMeta('flotation')
 const columns = ["样本编号", "采样单位", "采样层位", "土样重量", "浮选日期", "轻浮物类型", "操作人", "样本状态"]
-const actions = ["执行浮选", "完成分拣", "送出检测"]
-const statuses = ["已采集", "已浮选", "已分拣", "已送检", "已返回"]
+const actions = ["执行浮选", "完成分拣", "送出检测", "作废样本"]
+const statuses = ["已采集", "已浮选", "已分拣", "已送检", "已返回", "已作废"]
 const stats = [{"label": "样本总数", "value": 0}, {"label": "已浮选数", "value": 0}, {"label": "待分拣数", "value": 0}]
 
 const rows = ref<EntryRow[]>([])
